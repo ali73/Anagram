@@ -9,8 +9,16 @@ Words provided from dehkhoda & moein dictionary and wikipedia titles.
 You just need to install sqlalchemy .
 
 
+## How to use
+In order to add word to database call function `readwords(filename)`.
+
+The file should contain a word in each line.
+
+In order to get anagrams of a word call function `get_anagram(word)`.
+
 
 ## Authors
 
 * **Ali Mamizadeh**
+
 
