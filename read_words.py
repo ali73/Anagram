@@ -18,6 +18,3 @@ def read_words(filename):
 # read_words('dehkhoda.txt')
 # read_words('moin.txt')
 # read_words('wiki.txt')
-word = input()
-word = list(word)
-print(get_word(''.join(sorted(list(word)))).all())

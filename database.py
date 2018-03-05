@@ -1,13 +1,15 @@
 
-from    openpyxl import Workbook
 from sqlalchemy import Table
 from sqlalchemy import create_engine,String, Column
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import MetaData
 from sqlalchemy.exc import InvalidRequestError
+
+from config import DATABASE_URL
+
 Base = declarative_base()
-engine = create_engine("postgresql://nlp:123456@localhost/persianwords")
+engine = create_engine(DATABASE_URL)
 
 if  not engine.dialect.has_table(engine,'words'):
     metadata = MetaData(engine)
@@ -18,6 +20,15 @@ if  not engine.dialect.has_table(engine,'words'):
 
 Session = sessionmaker(bind=engine)
 session = Session()
+
+
+
+def save(object):
+    try:
+        session.add(object)
+        session.commit()
+    except InvalidRequestError:
+        raise
 class Word(Base):
     __tablename__ = 'words'
     word = Column(String(collation='utf8'),primary_key=True)
@@ -27,16 +38,7 @@ class Word(Base):
         return '<Word(name={0}, anagram={1})>'.format(self.word,self.anagram)
 
     def save(self):
-        try:
-            if self.word is None :
-                raise ValueError('word can\'t be None')
-            if self.anagram is None:
-                raise ValueError('anagram can\'t be None')
-            session.add(self)
-            session.commit()
-        except InvalidRequestError as e:
-            print(e)
-            pass
+        save(self)
 
 def get_word(anagram):
     print(anagram)
